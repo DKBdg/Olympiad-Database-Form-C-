@@ -1,0 +1,76 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="OlympiadDB" Class="DataClasses1DataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="AppSettings" ConnectionString="Data Source=DESKTOP-94MRD44\SQLEXPRESS;Initial Catalog=OlympiadDB;Integrated Security=True" SettingsObjectName="Dbcontextclass.Properties.Settings" SettingsPropertyName="OlympiadDBConnectionString" Provider="System.Data.SqlClient" />
+  <Table Name="dbo.T_Cities" Member="T_Cities">
+    <Type Name="T_City">
+      <Column Name="ID" Type="System.Int64" DbType="BigInt NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="CityName" Type="System.String" DbType="NVarChar(40)" CanBeNull="true" />
+      <Column Name="CountryID" Type="System.Int64" DbType="BigInt" CanBeNull="true" />
+      <Association Name="T_City_T_Olympiad" Member="T_Olympiads" ThisKey="ID" OtherKey="CityID" Type="T_Olympiad" />
+      <Association Name="T_Country_T_City" Member="T_Country" ThisKey="CountryID" OtherKey="ID" Type="T_Country" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.T_Countries" Member="T_Countries">
+    <Type Name="T_Country">
+      <Column Name="ID" Type="System.Int64" DbType="BigInt NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="CountryName" Type="System.String" DbType="NVarChar(40)" CanBeNull="true" />
+      <Association Name="T_Country_T_City" Member="T_Cities" ThisKey="ID" OtherKey="CountryID" Type="T_City" />
+      <Association Name="T_Country_T_Player" Member="T_Players" ThisKey="ID" OtherKey="CountryID" Type="T_Player" />
+    </Type>
+  </Table>
+  <Table Name="dbo.T_CProfiles" Member="T_CProfiles">
+    <Type Name="T_CProfile">
+      <Column Name="ID" Type="System.Int64" DbType="BigInt NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="PlayerID" Type="System.Int64" DbType="BigInt" CanBeNull="true" />
+      <Column Name="SportID" Type="System.Int64" DbType="BigInt" CanBeNull="true" />
+      <Association Name="T_CProfile_T_Medal" Member="T_Medals" ThisKey="ID" OtherKey="ProfileID" Type="T_Medal" />
+      <Association Name="T_Player_T_CProfile" Member="T_Player" ThisKey="PlayerID" OtherKey="ID" Type="T_Player" IsForeignKey="true" />
+      <Association Name="T_Sport_T_CProfile" Member="T_Sport" ThisKey="SportID" OtherKey="ID" Type="T_Sport" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.T_Medals" Member="T_Medals">
+    <Type Name="T_Medal">
+      <Column Name="ID" Type="System.Int64" DbType="BigInt NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Rarity" Type="System.String" DbType="NVarChar(40)" CanBeNull="true" />
+      <Column Name="ProfileID" Type="System.Int64" DbType="BigInt" CanBeNull="true" />
+      <Association Name="T_CProfile_T_Medal" Member="T_CProfile" ThisKey="ProfileID" OtherKey="ID" Type="T_CProfile" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.T_Olympiads" Member="T_Olympiads">
+    <Type Name="T_Olympiad">
+      <Column Name="ID" Type="System.Int64" DbType="BigInt NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="CityID" Type="System.Int64" DbType="BigInt" CanBeNull="true" />
+      <Column Name="Season" Type="System.String" DbType="NVarChar(40)" CanBeNull="true" />
+      <Column Name="OlympiadDate" Type="System.DateTime" DbType="Date" CanBeNull="true" />
+      <Association Name="T_Olympiad_T_Sport" Member="T_Sports" ThisKey="ID" OtherKey="OlympiadID" Type="T_Sport" />
+      <Association Name="T_City_T_Olympiad" Member="T_City" ThisKey="CityID" OtherKey="ID" Type="T_City" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.T_Players" Member="T_Players">
+    <Type Name="T_Player">
+      <Column Name="ID" Type="System.Int64" DbType="BigInt NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="FirstName" Type="System.String" DbType="NVarChar(40)" CanBeNull="true" />
+      <Column Name="LastName" Type="System.String" DbType="NVarChar(40)" CanBeNull="true" />
+      <Column Name="Birthday" Type="System.DateTime" DbType="Date" CanBeNull="true" />
+      <Column Name="CountryID" Type="System.Int64" DbType="BigInt" CanBeNull="true" />
+      <Association Name="T_Player_T_CProfile" Member="T_CProfiles" ThisKey="ID" OtherKey="PlayerID" Type="T_CProfile" />
+      <Association Name="T_Country_T_Player" Member="T_Country" ThisKey="CountryID" OtherKey="ID" Type="T_Country" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.T_Sports" Member="T_Sports">
+    <Type Name="T_Sport">
+      <Column Name="ID" Type="System.Int64" DbType="BigInt NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="OlympiadID" Type="System.Int64" DbType="BigInt" CanBeNull="true" />
+      <Column Name="SportTypeID" Type="System.Int64" DbType="BigInt" CanBeNull="true" />
+      <Association Name="T_Sport_T_CProfile" Member="T_CProfiles" ThisKey="ID" OtherKey="SportID" Type="T_CProfile" />
+      <Association Name="T_Olympiad_T_Sport" Member="T_Olympiad" ThisKey="OlympiadID" OtherKey="ID" Type="T_Olympiad" IsForeignKey="true" />
+      <Association Name="T_SportType_T_Sport" Member="T_SportType" ThisKey="SportTypeID" OtherKey="ID" Type="T_SportType" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.T_SportTypes" Member="T_SportTypes">
+    <Type Name="T_SportType">
+      <Column Name="ID" Type="System.Int64" DbType="BigInt NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="SportName" Type="System.String" DbType="NVarChar(40)" CanBeNull="true" />
+      <Association Name="T_SportType_T_Sport" Member="T_Sports" ThisKey="ID" OtherKey="SportTypeID" Type="T_Sport" />
+    </Type>
+  </Table>
+</Database>
